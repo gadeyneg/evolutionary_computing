@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 solution_save = []
 #%%
-f = open(r'c:\Users\gadey\Documents\ITMO\evolutionnary_computing\data1.txt', 'r')
+f = open(r'c:\Users\gadey\Documents\ITMO\evolutionnary_computing\TSP\data1.txt', 'r')
 
 def get_points(f):
     points = []
@@ -112,6 +112,8 @@ def main():
     pop = toolbox.population(n = POPULATION_SIZE * 2)
     CXPB, MUTPB, NGEN = 0.5, 0.25, N_gen
 
+    fitness = []
+
     # Evaluate the entire population
     fitnesses = map(toolbox.evaluate, pop)
     for ind, fit in zip(pop, fitnesses):
@@ -123,6 +125,8 @@ def main():
         
         if g%100 == 0:
             print("génération : ", g, ", score : ", offspring[0].fitness.values)
+        
+        fitness.append(offspring[0].fitness.values)
         
         random.shuffle(offspring)
         # Clone the selected individuals
@@ -156,9 +160,9 @@ def main():
         # The population is entirely replaced by the offspring
         pop[:] = offspring_copy
 
-    return toolbox.select(pop, len(pop))
+    return toolbox.select(pop, len(pop)), fitness
 
-L = main()
+L, fit = main()
 
 print(type(L))
 
@@ -199,3 +203,6 @@ props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
 
 plt.tight_layout()
 plt.show()
+#%%
+
+plt.plot(range(len(fit)), fit)
